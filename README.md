@@ -1,6 +1,6 @@
 ## 🍪 Cookie Clicker Project
 
-Dit is een schoolproject waarin wij (Ayaan en Jayden), samen in een team van twee, een **Cookie Clicker game** ontwikkelen met **HTML, CSS en JavaScript**.
+Dit is een schoolproject waarin wij (Aayan en Jayden), samen in een team van twee, een **Cookie Clicker game** ontwikkelen met **HTML, CSS en JavaScript**.
 We werken hier gedurende **8 weken** aan, waarbij we zowel de technische als projectmatige kant van softwareontwikkeling oefenen.
 
 ### 🎯 Leerdoelen
