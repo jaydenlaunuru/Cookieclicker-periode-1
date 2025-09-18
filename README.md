@@ -3,7 +3,7 @@
 Dit is een schoolproject waarin wij, samen in een team van twee, een Cookie Clicker game bouwen met HTML, CSS en JavaScript.
 Het project loopt over een periode van 8 weken, waarin we stapsgewijs de game verder uitwerken en uitbreiden.
 
-##🎯 Doelen
+#🎯 Doelen
 
 Oefenen met frontend webontwikkeling (HTML, CSS, JavaScript).
 
@@ -11,7 +11,7 @@ Leren werken met versiebeheer in Git/GitHub.
 
 Samenwerken aan een gedeeld project.
 
-##⚙️ Functionaliteiten (gepland)
+#⚙️ Functionaliteiten (gepland)
 
 Klikbare cookie die punten genereert.
 
@@ -21,7 +21,7 @@ Opslag van voortgang (bijv. via localStorage).
 
 Responsief design met een leuke, speelse uitstraling.
 
-##📅 Planning
+#📅 Planning
 
 Week 1-2: Basisopzet (HTML-structuur, eerste klikbare cookie).
 
