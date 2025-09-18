@@ -55,5 +55,5 @@ We werken hier gedurende **8 weken** aan, waarbij we zowel de technische als pro
 * **Week 1-2**: Basisopzet (HTML-structuur, eerste klikbare cookie)
 * **Week 3-4**: Upgrades en automatische cookie-generatie
 * **Week 5-6**: Styling, UI en accessibility verbeteren
-* **Week 7**: Opslaan van voortgang + bugfixes
-* **Week 8**: Eindafwerking, presentatie & reflectie
+* **Week 7-8**: Opslaan van voortgang + bugfixes. Eindafwerking, presentatie & reflectie
+
