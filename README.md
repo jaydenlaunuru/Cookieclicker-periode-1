@@ -1,34 +1,59 @@
-# 🍪 Cookie Clicker Project
+## 🍪 Cookie Clicker Project
 
-Dit is een schoolproject waarin wij, samen in een team van twee, een Cookie Clicker game bouwen met HTML, CSS en JavaScript.
-Het project loopt over een periode van 8 weken, waarin we stapsgewijs de game verder uitwerken en uitbreiden.
+Dit is een schoolproject waarin wij (Ayaan en Jayden), samen in een team van twee, een **Cookie Clicker game** ontwikkelen met **HTML, CSS en JavaScript**.
+We werken hier gedurende **8 weken** aan, waarbij we zowel de technische als projectmatige kant van softwareontwikkeling oefenen.
 
-## 🎯 Doelen
+### 🎯 Leerdoelen
 
-Oefenen met frontend webontwikkeling (HTML, CSS, JavaScript).
+**Ontwerpen**
 
-Leren werken met versiebeheer in Git/GitHub.
+* Activity diagram (gevorderd)
+* Klassendiagram (beginner)
+* Acceptatietest (gevorderd)
 
-Samenwerken aan een gedeeld project.
+**Programmeren**
 
-## ⚙️ Functionaliteiten (gepland)
+* Objectgeoriënteerd programmeren (begin/begin-midden niveau)
+* Codestructuur (gevorderd)
+* Projectstructuur (gevorderd)
+* Debugger gebruiken (beginner)
+* Libraries gebruiken (beginner)
+* Accessibility (gevorderd)
 
-Klikbare cookie die punten genereert.
+**Projectvaardigheden**
 
-Upgrades die automatisch cookies genereren.
+* User stories (gevorderd)
+* Reflecteren (gevorderd)
+* Werken in sprints (beginner)
+* Retrospective (beginner)
+* Scrumboard gebruik (beginner)
+* MoSCoW-methode (gevorderd)
+* Backlog voor eindexamen
+* Versiebeheer (gevorderd)
+* Plannen en opleveren op tijd
+* Presentatietechnieken
+* Gerealiseerde functionaliteit aantonen
 
-Opslag van voortgang (bijv. via localStorage).
+**IT Skills**
 
-Responsief design met een leuke, speelse uitstraling.
+* Copyright & licenties
+* Talen en frameworks: **JavaScript (gevorderd), HTML, CSS**
 
-## 📅 Planning
+---
 
-Week 1-2: Basisopzet (HTML-structuur, eerste klikbare cookie).
+### ⚙️ Geplande functionaliteiten
 
-Week 3-4: Upgrades en automatische cookie-generatie.
+* Klikbare cookie die punten genereert
+* Upgrades die automatisch cookies genereren
+* Opslag van voortgang via `localStorage`
+* Responsief design en toegankelijke UI
 
-Week 5-6: Styling en UI-verbeteringen met CSS.
+---
 
-Week 7: Opslaan van voortgang en bugfixes.
+### 📅 Planning (sprints)
 
-Week 8: Eindafwerking en presentatie.
+* **Week 1-2**: Basisopzet (HTML-structuur, eerste klikbare cookie)
+* **Week 3-4**: Upgrades en automatische cookie-generatie
+* **Week 5-6**: Styling, UI en accessibility verbeteren
+* **Week 7**: Opslaan van voortgang + bugfixes
+* **Week 8**: Eindafwerking, presentatie & reflectie
