@@ -13,11 +13,6 @@
     <div class="app">
         <header class="header">
             <h1>Cookie Clicker</h1>
-            <div class="stats">
-                <div class="stat"><span id="cookieCount">0</span> cookies</div>
-                <div class="stat"><span id="cps">0</span> cookies/sec</div>
-                <div class="stat"><span id="cpc">1</span> per click</div>
-            </div>
         </header>
 
         <main class="main">
@@ -25,6 +20,11 @@
                 <button id="cookieButton" class="cookie-button" aria-label="Klik voor cookies">
                     🍪
                 </button>
+                <div class="stats">
+                <div class="stat"><span id="cookieCount">0</span> cookies</div>
+                <div class="stat"><span id="cps">0</span> cookies/sec</div>
+                <div class="stat"><span id="cpc">1</span> per click</div>
+            </div>
                 <div id="floatingContainer" class="floating-container"></div>
             </section>
 
@@ -35,10 +35,8 @@
         </main>
 
         <footer class="footer">
-            <button id="saveBtn" class="secondary">Opslaan</button>
             <button id="resetBtn" class="danger">Reset</button>
-            <button id="restartBtn">Herstart</button>
-            <span class="muted">Voortgang wordt ook automatisch opgeslagen.</span>
+            <span class="muted">Voortgang wordt  automatisch opgeslagen.</span>
         </footer>
     </div>
 

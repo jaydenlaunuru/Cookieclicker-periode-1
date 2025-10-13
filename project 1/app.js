@@ -207,9 +207,7 @@
       this.renderShop();
       this.updateStats();
       this.$.button.addEventListener("click", () => this.game.click());
-      this.$.save.addEventListener("click", () => this.game.save());
       this.$.reset.addEventListener("click", () => this.game.reset());
-      this.$.restart.addEventListener("click", () => this.game.restart());
     }
 
     renderShop() {
@@ -307,5 +305,4 @@
     game.start();
   });
 })();
-
 
