@@ -267,7 +267,7 @@
     spawnFloat(text) {
       const el = document.createElement("div");
       el.className = "float";
-      el.textContent = text;
+      el.textContent = `${text}🍪`;
       el.style.left = "50%";
       el.style.top = "50%";
       this.$.floatContainer.appendChild(el);

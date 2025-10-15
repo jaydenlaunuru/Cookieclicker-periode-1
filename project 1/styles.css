@@ -85,8 +85,7 @@ button {
   color: #0b1029;
   border: none; border-radius: 10px; cursor: pointer;
   padding: 10px 14px; font-weight: 700; letter-spacing: .2px;
-  transition: transform .06s ease, filter .15s ease;
-}
+  transition: transform .06s ease, filter .15s ease; }
 button:hover { filter: brightness(1.1); }
 button:active { transform: translateY(1px); }
 button.secondary { background: #e6ebff; color: #1e293b; }
@@ -94,10 +93,9 @@ button.danger { background: var(--danger); color: #1a0b0b; }
 button:disabled { filter: grayscale(1) brightness(.6); cursor: not-allowed; }
 
 .footer { color: rgb(255, 255, 255); display: flex; gap: 12px; align-items: center; padding: 16px 24px; border-top: 1px solid rgba(0,0,0,.06); background: linear-gradient(0deg, rgba(255,255,255,.03), rgba(255,255,255,0)); }
+
 @media (max-width: 900px) {
   .main { grid-template-columns: 1fr; }
   .shop { order: 2; }
   .clicker { order: 1; }
-  .header h1 { font-size: 28px; }
-}
-
+  .header h1 { font-size: 28px; } }
