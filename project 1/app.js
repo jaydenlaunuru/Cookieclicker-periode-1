@@ -53,7 +53,6 @@
       try {
         localStorage.setItem(key, JSON.stringify(data));
       } catch (e) {
-        // ignore
       }
     }
 
@@ -79,12 +78,12 @@
 
     createDefaultUpgrades() {
       return [
-        new Upgrade({ id: "cursor", name: "Cursor", description: "+0.1 cps", baseCost: 15, growth: 1.15, cps: 0.1 }),
-        new Upgrade({ id: "click", name: "Sterkere klik", description: "+1 cpc", baseCost: 50, growth: 1.25, cpc: 1 }),
-        new Upgrade({ id: "grandma", name: "Oma", description: "+1 cps", baseCost: 100, growth: 1.15, cps: 1 }),
-        new Upgrade({ id: "farm", name: "Boerderij", description: "+8 cps", baseCost: 1100, growth: 1.15, cps: 8 }),
-        new Upgrade({ id: "mine", name: "Mijn", description: "+47 cps", baseCost: 12000, growth: 1.15, cps: 47 }),
-        new Upgrade({ id: "factory", name: "Fabriek", description: "+260 cps", baseCost: 130000, growth: 1.15, cps: 260 })
+        new Upgrade({ id: "cursor", name: "Cursor", description: "+0.1 cps", baseCost: 15, growth: 1.1, cps: 0.1 }),
+        new Upgrade({ id: "click", name: "Sterkere klik", description: "+1 cpc", baseCost: 50, growth: 1.1, cpc: 1 }),
+        new Upgrade({ id: "grandma", name: "Oma", description: "+1 cps", baseCost: 100, growth: 1.2, cps: 1 }),
+        new Upgrade({ id: "farm", name: "Boerderij", description: "+8 cps", baseCost: 1100, growth: 1.2, cps: 8 }),
+        new Upgrade({ id: "mine", name: "Mijn", description: "+47 cps", baseCost: 12000, growth: 1.3, cps: 47 }),
+        new Upgrade({ id: "factory", name: "Fabriek", description: "+260 cps", baseCost: 130000, growth: 1.4, cps: 260 })
       ];
     }
 
@@ -179,12 +178,6 @@
       this.save();
       this.ui.toast("Gerest", "danger");
     }
-
-    restart() {
-      if (!confirm("Helemaal opnieuw beginnen? Dit wist je opgeslagen spel.")) return;
-      try { localStorage.removeItem("cookie-clicker-oop"); } catch (_) {}
-      location.reload();
-    }
   }
 
   class UIController {
@@ -195,10 +188,9 @@
         cps: document.getElementById("cps"),
         cpc: document.getElementById("cpc"),
         button: document.getElementById("cookieButton"),
+        img: document.querySelector("#cookieButton .cookie-img"),
         shop: document.getElementById("shopList"),
-        save: document.getElementById("saveBtn"),
         reset: document.getElementById("resetBtn"),
-        restart: document.getElementById("restartBtn"),
         floatContainer: document.getElementById("floatingContainer")
       };
     }
@@ -206,7 +198,18 @@
     mount() {
       this.renderShop();
       this.updateStats();
-      this.$.button.addEventListener("click", () => this.game.click());
+      const clickable = this.$.img || this.$.button;
+      clickable.addEventListener("click", (ev) => {
+        const rect = this.$.button.getBoundingClientRect();
+        const x = ev.clientX - rect.left;
+        const y = ev.clientY - rect.top;
+        this.game.click();
+        const last = this.$.floatContainer.lastElementChild;
+        if (last) {
+          last.style.left = x + "px";
+          last.style.top = y + "px";
+        }
+      });
       this.$.reset.addEventListener("click", () => this.game.reset());
     }
 
@@ -265,14 +268,18 @@
       const el = document.createElement("div");
       el.className = "float";
       el.textContent = text;
+      el.style.left = "50%";
+      el.style.top = "50%";
       this.$.floatContainer.appendChild(el);
-      const duration = 800;
+      const duration = 900;
+      const driftX = (Math.random() * 40 - 20); 
+      const rise = 60 + Math.random() * 20;
       el.animate([
-        { transform: "translateY(0)", opacity: 0 },
-        { transform: "translateY(-10px)", opacity: 1, offset: 0.25 },
-        { transform: "translateY(-40px)", opacity: 0 }
-      ], { duration, easing: "ease-out" });
-      setTimeout(() => el.remove(), duration + 20);
+        { transform: "translate(-50%, -50%) translate(0, 0) scale(.9)", opacity: 0 },
+        { transform: `translate(-50%, -50%) translate(${driftX * 0.3}px, -${rise * 0.3}px) scale(1)`, opacity: 1, offset: 0.25 },
+        { transform: `translate(-50%, -50%) translate(${driftX}px, -${rise}px) scale(1.05)`, opacity: 0 }
+      ], { duration, easing: "cubic-bezier(.22,.61,.36,1)" });
+      setTimeout(() => el.remove(), duration + 40);
     }
 
     toast(message, type) {
@@ -299,7 +306,6 @@
     }
   }
 
-  // Bootstrap
   window.addEventListener("DOMContentLoaded", () => {
     const game = new CookieClickerGame();
     game.start();
