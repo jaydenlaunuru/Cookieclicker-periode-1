@@ -74,6 +74,7 @@
       this.tickInterval = null;
       this.autosaveInterval = null;
       this.ui = new UIController(this);
+      this.achievements = new AchievementService(this, this.ui);
     }
 
     createDefaultUpgrades() {
@@ -131,6 +132,7 @@
     tick(deltaSeconds) {
       const earned = this.cookiesPerSecond * deltaSeconds;
       if (earned > 0) this.addCookies(earned);
+      this.achievements.checkAchievements();
     }
 
     save() {
@@ -248,6 +250,20 @@
       this.$.shop.appendChild(frag);
     }
 
+    renderAchievements() {
+      const box = document.getElementById("achievementsBox");
+      if (!box) return;
+      box.innerHTML = "<div style='font-weight:bold; margin-bottom:8px;'>Achievements</div><div id='achievementsList'></div>";
+      const list = document.getElementById("achievementsList");
+      for (const ach of this.game.achievements.achievements) {
+        const unlocked = this.game.achievements.unlocked.has(ach.id);
+        const item = document.createElement("div");
+        item.textContent = unlocked ? `✅ ${ach.name}` : `🔒 ${ach.name}`;
+        item.title = ach.description;
+        list.appendChild(item);
+      }
+    }
+
     updateStats() {
       this.$.cookies.textContent = Formatter.formatNumber(Math.floor(this.game.state.cookies));
       this.$.cps.textContent = this.game.cookiesPerSecond.toFixed(1);
@@ -262,6 +278,7 @@
         if (meta) meta.textContent = `${upg.name} × ${upg.count}`;
         if (price) price.textContent = `${Formatter.formatNumber(upg.getCost())} 🍪`;
       });
+      this.renderAchievements();
     }
 
     spawnFloat(text) {
@@ -303,6 +320,60 @@
         { transform: "translate(-50%, -6px)", opacity: 0 }
       ], { duration, easing: "ease-out" });
       setTimeout(() => el.remove(), duration + 30);
+    }
+  }
+
+  class AchievementService {
+    constructor(game, ui) {
+      this.game = game;
+      this.ui = ui;
+      this.achievements = [
+        {
+          id: "50k",
+          name: "50.000 Cookies!",
+          description: "Goed gedaan! Je hebt 50.000 cookies verzameld.",
+          condition: (state) => state.totalCookies >= 50000
+        }
+        ,{
+          id: "100k",
+          name: "100.000 Cookies!",
+          description: "Gefeliciteerd! Je hebt 100.000 cookies verzameld.",
+          condition: (state) => state.totalCookies >= 100000
+        }
+        ,{
+          id: "1m",
+          name: "1 Miljoen Cookies!",
+          description: "Wauw! Je hebt 1 miljoen cookies verzameld.",
+          condition: (state) => state.totalCookies >= 1000000
+        }
+        ,{
+          id: "5m",
+          name: "5 Miljoen Cookies!",
+          description: "Ongelooflijk! Je hebt 5 miljoen cookies verzameld.",
+          condition: (state) => state.totalCookies >= 5000000
+        }
+        ,{
+          id: "10m",
+          name: "10 Miljoen Cookies!",
+          description: "Legendarisch! Je hebt 10 miljoen cookies verzameld.",
+          condition: (state) => state.totalCookies >= 10000000
+        }
+      ];
+      this.unlocked = new Set();
+    }
+
+    checkAchievements() {
+      let unlockedAny = false;
+      for (const ach of this.achievements) {
+        if (!this.unlocked.has(ach.id) && ach.condition(this.game.state)) {
+          this.unlocked.add(ach.id);
+          this.ui.toast(ach.description, "success");
+          unlockedAny = true;
+        }
+      }
+      if (unlockedAny && this.ui.renderAchievements) {
+        this.ui.renderAchievements();
+      }
     }
   }
 
