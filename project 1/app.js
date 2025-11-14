@@ -1,12 +1,6 @@
-// Simple Cookie Clicker (OOP, beginner-friendly)
-// This file contains the main game logic for the Cookie Clicker project.
-// Each section below is a small class with a short comment explaining its purpose.
-(function () {
-  "use strict";
-
-  // Formatter: small helper for showing large numbers nicely
+  // Formatter: small helper for showing large numbers nicely //
   class Formatter {
-    // formatNumber: turn 1500 -> "1.50K" (shortened string for display)
+    // formatNumber: turn 1500 -> "1.50K" (shortened string for display) //
     static formatNumber(value) {
       if (value < 1000) return value.toString();
       const units = ["", "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc"];
@@ -20,9 +14,9 @@
     }
   }
 
-  // Upgrade: represents a buyable item in the shop (cursor, grandma, etc.)
+  // Upgrade: represents a buyable item in shop(cursor, grandma, etc.) //
   class Upgrade {
-    // constructor: create an upgrade with its properties
+    // constructor: create an upgrade with its properties //
     constructor({ id, name, description, baseCost, growth, cps, cpc }) {
       this.id = id;
       this.name = name;
@@ -34,7 +28,7 @@
       this.cpc = cpc || 0; 
     }
 
-    // getCost: cost increases with how many we own
+    // getCost: cost increases with how many we own //
     getCost() {
       return Math.floor(this.baseCost * Math.pow(this.growth, this.count));
     }
@@ -47,17 +41,17 @@
     }
   }
 
-  // GameState: small object that stores numbers we persist (cookies, totals)
+  // GameState:(cookies, totals) //
   class GameState {
     constructor() {
-      this.cookies = 0; // current cookies you can spend
-      this.totalCookies = 0; // lifetime total (for achievements)
-      this.manualClicks = 0; // how many times clicked
-      this.lastSavedAt = 0; // timestamp when we last saved
+      this.cookies = 0; // current cookies //
+      this.totalCookies = 0; // total (for achievements) //
+      this.manualClicks = 0; // times clicked //
+      this.lastSavedAt = 0; // timestamp last saved //
     }
   }
 
-  // StorageService: tiny wrapper around localStorage for JSON saving/loading
+  // StorageService: tiny wrapper around localStorage for JSON saving/loading //
   class StorageService {
     // save: store object under a key
     static save(key, data) {
@@ -68,7 +62,7 @@
       }
     }
 
-    // load: read JSON and parse, return fallback if missing
+    // load: read JSON and parse, return fallback if missing //
     static load(key, fallback) {
       try {
         const raw = localStorage.getItem(key);
@@ -79,9 +73,9 @@
     }
   }
 
-  // CookieClickerGame: main game class — keeps state and ties subsystems together
+  // CookieClickerGame: main game class — keeps state and ties subsystems together //
   class CookieClickerGame {
-    // constructor: set up default state, services and UI
+    // constructor: set up default state, services and UI //
     constructor() {
       this.state = new GameState();
       this.clickPowerBase = 1;
@@ -92,7 +86,7 @@
       this.achievements = new AchievementService(this, this.ui);
       this.themeService = new ThemeService(this, this.ui);
       this.started = false;
-      // settings (persisted separately)
+      // settings (persisted separately) //
       this.settings = {
         autosaveEnabled: true,
         autosaveIntervalSec: 10
@@ -103,7 +97,7 @@
       this.soundService = new SoundService(this);
     }
 
-    // createDefaultUpgrades: returns an array of upgrades available in shop
+    // createDefaultUpgrades: returns an array of upgrades available in shop //
     createDefaultUpgrades() {
       return [
         new Upgrade({ id: "cursor", name: "Cursor", description: "+0.1 cps", baseCost: 15, growth: 1.1, cps: 0.1 }),
@@ -115,33 +109,33 @@
       ];
     }
 
-    // cookiesPerSecond: sum of all passive cookie production
+    // cookiesPerSecond: sum of all passive cookie production //
     get cookiesPerSecond() {
       let cps = 0;
       for (const u of this.upgrades) cps += u.cps * u.count;
       return cps;
     }
 
-    // cookiesPerClick: how many cookies you get when you click
+    // cookiesPerClick: how many cookies you get when you click //
     get cookiesPerClick() {
       let cpc = this.clickPowerBase;
       for (const u of this.upgrades) cpc += u.cpc * u.count;
       return cpc;
     }
 
-    // addCookies: add to current and lifetime totals and update UI
+    // addCookies: add to current and lifetime totals and update UI //
     addCookies(amount) {
       this.state.cookies += amount;
       this.state.totalCookies += amount;
       this.ui.updateStats();
     }
 
-    // canAfford: check if player has enough cookies (use floor to avoid tiny fractions)
+    // canAfford: check if player has enough cookies (use floor to avoid tiny fractions) //
     canAfford(cost) {
       return Math.floor(this.state.cookies) >= cost;
     }
 
-    // buyUpgrade: attempt to purchase an upgrade, returns true on success
+    // buyUpgrade: attempt to purchase an upgrade, returns true on success //
     buyUpgrade(id) {
       const upg = this.upgrades.find(u => u.id === id);
       if (!upg) return false;
@@ -149,16 +143,17 @@
       if (!this.canAfford(cost)) return false;
       this.state.cookies -= cost;
       upg.count += 1;
-      // refresh shop UI after buying
-      if (this.ui && this.ui.renderShopPanel) this.ui.renderShopPanel();
-      else {
+      // refresh shop UI after buying //
+      if (this.ui && this.ui.renderShopPanel) {
+        this.ui.renderShopPanel();
+      } else {
         this.ui.updateStats();
-        this.ui.renderShop();
+        if (this.ui.renderShop) this.ui.renderShop();
       }
       return true;
     }
 
-    // click: handle a manual click (gain cookies and visual float)
+    // click: handle a manual click (gain cookies and visual float) //
     click() {
       const amount = this.cookiesPerClick;
       this.addCookies(amount);
@@ -167,7 +162,7 @@
       try { if (this.soundService) this.soundService.playClick(); } catch (_) {}
     }
 
-    // tick: called every frame to apply passive income and check achievements
+    // tick: called every frame to apply passive income and check achievements //
     tick(deltaSeconds) {
       const earned = this.cookiesPerSecond * deltaSeconds;
       if (earned > 0) this.addCookies(earned);
@@ -175,7 +170,7 @@
       if (this.themeService) this.themeService.checkUnlocks();
     }
 
-    // save: persist game state (upgrades, themes, and state) to localStorage
+    // save: persist game state (upgrades, themes, and state) -> localStorage //
     save() {
       const data = {
         state: this.state,
@@ -192,7 +187,7 @@
       this.ui.toast("Opgeslagen", "success");
     }
 
-    // load: read persisted data and restore game objects
+    // load: read persisted data and restore game objects //
     load() {
       const data = StorageService.load("cookie-clicker-oop", null);
       if (!data) return;
@@ -204,7 +199,7 @@
       if (this.themeService) this.themeService.load(data.themes || null);
     }
 
-    // start: initialize UI, restore data and begin the game loop
+    // start: initialize UI, restore data and begin the game loop //
     start() {
       if (this.started) return;
       this.load();
@@ -217,7 +212,7 @@
         requestAnimationFrame(loop);
       };
       requestAnimationFrame(loop);
-      // autosave only if enabled
+      // autosave if enabled //
       if (this.settings && this.settings.autosaveEnabled) {
         const ms = (this.settings.autosaveIntervalSec || 10) * 1000;
         this.autosaveInterval = setInterval(() => this.save(), ms);
@@ -225,7 +220,7 @@
       this.started = true;
     }
 
-    // loadSettings: read small UI settings like sound on/off
+    // loadSettings: read small UI settings like sound on/off //
     loadSettings() {
       try {
         const raw = localStorage.getItem('cookie-settings');
@@ -235,7 +230,7 @@
       } catch (_) {}
     }
 
-    // saveSettings: persist small UI settings
+    // saveSettings: persist small UI settings //
     saveSettings() {
       try {
         const out = { soundEnabled: !!this.settings.soundEnabled };
@@ -245,22 +240,26 @@
       } catch (_) {}
     }
 
-    // reset: restore a fresh game after confirmation
+    // reset: restore a fresh game after confirmation //
     reset() {
       if (!confirm("Weet je zeker dat je wilt resetten?")) return;
       this.state = new GameState();
       this.upgrades = this.createDefaultUpgrades();
       if (this.themeService) this.themeService.reset();
-      this.ui.renderShop();
+      if (this.ui && this.ui.renderShopPanel) {
+        this.ui.renderShopPanel();
+      } else if (this.ui.renderShop) {
+        this.ui.renderShop();
+      }
       this.ui.updateStats();
       this.save();
       this.ui.toast("Gerest", "danger");
     }
   }
 
-  // UIController: handles all DOM updates and user interactions
-  // This class reads the game state and renders the shop, achievements,
-  // theme lists and small UI feedback (toasts, floats).
+  // UIController: handles all DOM updates and user interactions //
+  // This class reads the game state and renders the shop, achievements, //
+  // theme lists and small UI feedback (toasts, floats). //
   class UIController {
     constructor(game) {
       this.game = game;
@@ -276,7 +275,7 @@
       };
       this.activeTab = 'shop';
       this.$.shopSection = document.querySelector('.shop');
-      // start screen & settings elements (may not exist yet when UIController constructed, so query lazily in mount)
+      // start screen & settings elements (may not exist yet when UIController constructed, so query lazily in mount) //
       this.startScreen = null;
       this.settingsModal = null;
       this.playBtn = null;
@@ -288,7 +287,7 @@
     mount() {
       this.renderShopPanel();
       this.updateStats();
-  // query start/settings elements now that DOM is ready
+  // query start/settings elements now that DOM is ready //
   this.startScreen = document.getElementById('startScreen');
   this.settingsModal = document.getElementById('settingsModal');
   this.playBtn = document.getElementById('playBtn');
@@ -296,16 +295,13 @@
   this.saveSettingsBtn = document.getElementById('saveSettingsBtn');
   this.closeSettingsBtn = document.getElementById('closeSettingsBtn');
 
-
-    
-      
-      // header settings icon (top-left)
+      // header settings icon (top-left) //
       const headerSettings = document.getElementById('settingsIcon');
       if (headerSettings) headerSettings.addEventListener('click', () => this.showSettings());
 
       if (this.playBtn) {
         this.playBtn.addEventListener('click', () => {
-          // apply settings currently in UI before starting
+          // apply settings currently in UI before starting //
           this.readSettingsFromUI();
           this.game.saveSettings();
           this.hideStartScreen();
@@ -321,7 +317,7 @@
       });
       const resetProgressBtn = document.getElementById('resetProgressBtn');
       if (resetProgressBtn) resetProgressBtn.addEventListener('click', () => {
-        // call game's reset (already asks confirm)
+        // call game's reset (already asks confirm) //
         this.hideSettings();
         this.game.reset();
       });
@@ -354,7 +350,7 @@
         });
       }
 
-      // populate UI with saved settings
+      // populate UI with saved settings //
       this.writeSettingsToUI();
       const clickable = this.$.img || this.$.button;
       clickable.addEventListener("click", (ev) => {
@@ -368,7 +364,7 @@
           last.style.top = y + "px";
         }
       });
-      // footer reset removed; reset now in settings modal
+      // footer reset removed; reset now in settings modal //
     }
 
     showStartScreen() {
@@ -392,7 +388,7 @@
 
       const icon = document.createElement('div');
       icon.className = 'icon';
-      // choose emoji based on achievement target size
+      // choose emoji based on achievement target size //
       let emoji = '🎉';
       let color = 'var(--primary)';
       try {
@@ -421,12 +417,12 @@
 
       el.appendChild(icon);
       el.appendChild(body);
-      // set accent color
+      // set accent color //
       el.style.borderLeftColor = color;
 
       container.appendChild(el);
 
-      // remove after duration
+      // remove after duration //
       const duration = 3500;
       setTimeout(() => {
         el.classList.remove('show');
@@ -453,7 +449,7 @@
 
     writeSettingsToUI() {
       const s = this.game.settings || { soundEnabled: true };
-      // sound toggle
+      // sound toggle //
       const soundToggle = document.getElementById('soundToggle');
       if (soundToggle) soundToggle.checked = !!(s.soundEnabled !== false);
     }
@@ -465,10 +461,10 @@
       } catch (_) {}
     }
     renderShop() {
-      // Ensure we have a stable shop-list element to render into (inside panel-content when present)
+      // Ensure we have a stable shop-list element to render into (inside panel-content when present) //
       const panelContent = this.$.shopSection ? this.$.shopSection.querySelector('.panel-content') : null;
       if (panelContent) {
-        // ensure a dedicated .shop-list exists inside the panel content
+        // ensure a dedicated .shop-list exists inside the panel content //
         let shopList = panelContent.querySelector('.shop-list');
         if (!shopList) {
           shopList = document.createElement('div');
@@ -517,7 +513,7 @@
 
     renderShopPanel() {
       if (!this.$.shopSection) return this.renderShop();
-      // ensure tab and content containers exist
+      // ensure tab and content containers exist //
       let tabs = this.$.shopSection.querySelector('.panel-tabs');
       if (!tabs) {
         tabs = document.createElement('div');
@@ -528,13 +524,13 @@
       if (!content) {
         content = document.createElement('div');
         content.className = 'panel-content';
-        // move existing shop list into content on first render
+        // move existing shop list into content on first render //
         const existing = this.$.shop;
         content.appendChild(existing);
         this.$.shopSection.appendChild(content);
       }
 
-      // render tabs
+      // render tabs //
       tabs.innerHTML = '';
       const tabsDef = [
         { id: 'shop', label: 'Winkel' },
@@ -552,26 +548,21 @@
         tabs.appendChild(b);
       }
 
-      // render content for active tab
+      // render content for active tab //
       content.innerHTML = '';
-      // ensure the panel title exists and set it depending on active tab
+      // ensure the panel title exists and set it depending on active tab //
       let titleEl = this.$.shopSection.querySelector('.panel-title');
       if (!titleEl) {
         titleEl = document.createElement('h2');
         titleEl.className = 'panel-title';
         this.$.shopSection.insertBefore(titleEl, this.$.shopSection.querySelector('.panel-content'));
       }
-      // show title only for the shop tab
-      titleEl.textContent = this.activeTab === 'shop' ? 'Winkel' : '';
+      // hide panel-title for all tabs (titles are now inside content) //
+      titleEl.textContent = '';
       if (this.activeTab === 'shop') {
-        // ensure shopList exists
-        if (!this.$.shop) {
-          const shopList = document.createElement('div');
-          shopList.id = 'shopList';
-          shopList.className = 'shop-list';
-          this.$.shop = shopList;
-        }
-        content.appendChild(this.$.shop);
+        // create title and shop list structure like achievements/themes //
+        content.innerHTML = "<div>Winkel</div><div class='shop-list' id='shopList'></div>";
+        this.$.shop = content.querySelector('.shop-list');
         this.renderShop();
       } else if (this.activeTab === 'achievements') {
         this.renderAchievements(content);
@@ -580,11 +571,11 @@
       }
     }
 
-    // render achievements into a provided container (panel). If container omitted, try to find achievementsBox (fallback).
+    // render achievements into a provided container (panel). If container omitted, try to find achievementsBox (fallback). //
     renderAchievements(container) {
       const box = container || document.getElementById("achievementsBox");
       if (!box) return;
-      box.innerHTML = "<div style='font-weight:bold; margin-bottom:8px;'>Achievements</div><div class='achievements-list'></div>";
+      box.innerHTML = "<div>Achievements</div><div class='achievements-list'></div>";
       const list = box.querySelector('.achievements-list');
       const total = this.game.state.totalCookies || 0;
       for (const ach of this.game.achievements.achievements) {
@@ -627,7 +618,7 @@
     renderThemes(container) {
       const box = container || document.getElementById("achievementsBox");
       if (!box) return;
-      box.innerHTML = "<div style='font-weight:bold; margin-bottom:8px;'>Thema's</div><div class='themes-list'></div>";
+      box.innerHTML = "<div>Thema's</div><div class='themes-list'></div>";
       const themesList = box.querySelector('.themes-list');
       for (const t of this.game.themeService.themes) {
         const unlocked = this.game.themeService.unlocked.has(t.id);
@@ -671,7 +662,7 @@
       this.$.cookies.textContent = Formatter.formatNumber(Math.floor(this.game.state.cookies));
       this.$.cps.textContent = this.game.cookiesPerSecond.toFixed(1);
       this.$.cpc.textContent = Formatter.formatNumber(this.game.cookiesPerClick);
-      // prefer the shop-list inside the panel (if present) otherwise fall back
+      // prefer the shop-list inside the panel (if present) otherwise fall back //
       const shopList = (this.$.shopSection && this.$.shopSection.querySelector('.shop-list')) || this.$.shop;
       if (shopList) {
         const items = shopList.querySelectorAll(".shop-item");
@@ -688,6 +679,9 @@
       this.renderAchievements();
     }
 
+    // Creates a floating animation element that displays the cookie text: creates a div, positions it in the center //
+    // adds random drift and rise, and animates the element with fade-in/out and scale effects //
+    // 'el' -> element (HTML element) //
     spawnFloat(text) {
       const el = document.createElement("div");
       el.className = "float";
@@ -734,8 +728,8 @@
     constructor(game, ui) {
       this.game = game;
       this.ui = ui;
-      // Achievements mapped to theme IDs so unlocking an achievement unlocks a theme
-      // Each achievement includes a numeric `target` for progress display
+      // Achievements mapped to theme IDs so unlocking an achievement unlocks a theme //
+      // Each achievement includes a numeric `target` for progress display //
       this.achievements = [
         { id: '10k', name: '10.000 Cookies', description: 'Je hebt 10.000 cookies verzameld.', target: 10000, condition: s => s.totalCookies >= 10000, themeId: 't10k' },
         { id: '50k', name: '50.000 Cookies', description: 'Je hebt 50.000 cookies verzameld.', target: 50000, condition: s => s.totalCookies >= 50000, themeId: 't50k' },
@@ -750,8 +744,8 @@
       this.unlocked = new Set();
     }
 
-    // checkAchievements: examine achievement conditions and unlock when met
-    // We also notify the UI so the player sees progress and unlocked themes
+    // checkAchievements: examine achievement conditions and unlock when met //
+    // We also notify the UI so the player sees progress and unlocked themes //
     checkAchievements() {
       let unlockedAny = false;
       for (const ach of this.achievements) {
@@ -759,7 +753,7 @@
           this.unlocked.add(ach.id);
           this.ui.toast(ach.description, "success");
           try { if (this.ui && typeof this.ui.notifyAchievement === 'function') this.ui.notifyAchievement(ach); } catch (_) {}
-          // if achievement awards a theme, unlock it in ThemeService
+          // if achievement awards a theme, unlock it in ThemeService //
           try {
             if (ach.themeId && this.game.themeService) {
               this.game.themeService.unlocked.add(ach.themeId);
@@ -780,7 +774,7 @@
     constructor(game, ui) {
       this.game = game;
       this.ui = ui;
-      // Expanded theme list including achievement-themed ids
+      // Expanded theme list including achievement-themed ids //
       this.themes = [
         { id: 'default', name: 'Standaard', cssClass: '', unlockAt: 0, price: 0 },
         { id: 't10k', name: 'Ocean (10k)', cssClass: 'theme-t10k', unlockAt: 10000, price: 2000 },
@@ -798,7 +792,7 @@
       this.current = 'default';
     }
 
-    // checkUnlocks: reveal themes when player reaches their unlock threshold
+    // checkUnlocks: reveal themes when player reaches their unlock threshold //
 
     checkUnlocks() {
       let any = false;
@@ -830,11 +824,11 @@
         this.ui.toast('Niet genoeg cookies', 'danger');
         return false;
       }
-      // Deduct and grant ownership
+      // Deduct and grant ownership //
       this.game.state.cookies -= t.price;
       this.owned.add(id);
       try { this.game.save(); } catch (_) {}
-      // play purchase sound
+      // play purchase sound //
       try { if (this.game.soundService) this.game.soundService.playPurchase(); } catch (_) {}
       this.ui.toast(`${t.name} thema gekocht!`, 'success');
       if (this.ui && this.ui.renderShopPanel) this.ui.renderShopPanel();
@@ -844,7 +838,7 @@
     applyTheme(id) {
       const t = this.themes.find(x => x.id === id);
       if (!t) return;
-      // require ownership to apply (except default)
+      // require ownership to apply (except default) //
       if (t.id !== 'default' && !this.owned.has(t.id)) {
         this.ui.toast('Je moet dit thema eerst kopen', 'danger');
         return;
@@ -867,7 +861,7 @@
         if (data.unlocked) this.unlocked = new Set(data.unlocked);
         if (data.owned) this.owned = new Set(data.owned);
         if (data.current) this.current = data.current;
-        // apply only if owned or default
+        // apply only if owned or default //
         if (this.current && (this.current === 'default' || this.owned.has(this.current))) this.applyTheme(this.current);
       } catch (_) {}
     }
@@ -880,7 +874,7 @@
     }
   }
 
-  // Simple WebAudio-based sound service
+  // Simple WebAudio-based sound service //
   class SoundService {
     constructor(game) {
       this.game = game;
@@ -907,24 +901,22 @@
       g.gain.exponentialRampToValueAtTime(0.001, now + time);
       o.stop(now + time + 0.02);
     }
-    // playClick / playPurchase: short helper wrappers to play preset tones
+    // playClick / playPurchase: short helper wrappers to play preset tones //
     playClick() { this.playTone(880, 0.06, 'sine'); }
     playPurchase() { this.playTone(440, 0.12, 'triangle'); }
   }
 
   window.addEventListener("DOMContentLoaded", () => {
     const game = new CookieClickerGame();
-    // show start screen and wait for user to press Play
+    // show start screen and wait for user to press Play  //
     if (game.ui && typeof game.ui.showStartScreen === 'function') {
       // mount UI so start/settings buttons exist
       game.ui.mount();
-      // populate settings UI sound toggle from saved settings
+      // populate settings UI sound toggle from saved settings //
       if (game.ui.writeSettingsToUI) game.ui.writeSettingsToUI();
       game.ui.showStartScreen();
     } else {
-      // fallback: start immediately
+      // fallback: start immediately //
       game.start();
     }
   });
-})();
-
