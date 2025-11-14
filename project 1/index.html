@@ -10,9 +10,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="app">
-    <div id="achievementsBox"></div>
+        <div class="app">
+        <!-- Start screen (overlay) -->
+        <div id="startScreen" class="start-screen" aria-hidden="false">
+            <div class="start-card">
+                <h1>Cookie Clicker</h1>
+                <p>Verzamel cookies, koop upgrades en ontgrendel thema's!</p>
+                <div class="start-actions">
+                    <button id="playBtn">Play</button>
+                    <button id="openSettingsBtn" class="secondary">Settings</button>
+                </div>
+            </div>
+        </div>
+
+            <!-- Settings modal -->
+            <div id="settingsModal" class="settings-modal" aria-hidden="true">
+                <div class="settings-card">
+                    <h2>Instellingen</h2>
+                            <div class="settings-row">
+                                <label><input type="checkbox" id="soundToggle" checked> Geluid inschakelen</label>
+                            </div>
+                    <div class="settings-actions">
+                        <button id="saveSettingsBtn" class="secondary">Opslaan</button>
+                        <button id="resetProgressBtn" class="danger">Reset voortgang</button>
+                        <button id="closeSettingsBtn">Sluiten</button>
+                    </div>
+                </div>
+            </div>
     <header class="header">
+        <button id="settingsIcon" class="settings-icon" title="Instellingen">⚙️</button>
         <h1>Cookie Clicker</h1>
     </header>
 
@@ -30,14 +56,13 @@
         </section>
 
         <section class="shop">
-            <h2>Winkel</h2>
+            <h2 class="panel-title"></h2>
             <div id="shopList" class="shop-list"></div>
         </section>
     </main>
 
     <footer class="footer">
-        <button id="resetBtn" class="danger">Reset</button>
-        <span class="muted">Voortgang wordt  automatisch opgeslagen.</span>
+        <!-- footer text removed per request -->
     </footer>
   </div>
 

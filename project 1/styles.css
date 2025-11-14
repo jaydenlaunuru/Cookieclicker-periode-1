@@ -12,6 +12,79 @@
   --shadow: 0 8px 24px rgba(0,0,0,.12);
 }
 
+/* Start screen and settings modal */
+.start-screen {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(3,6,23,0.6);
+  z-index: 60;
+}
+.start-card {
+  background: var(--panel);
+  color: var(--text);
+  padding: 28px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  max-width: 420px;
+}
+.start-card h1 { margin: 0 0 6px; font-size: 32px; }
+.start-actions { display:flex; gap:10px; justify-content:center; margin-top:12px; }
+
+.settings-modal { position: fixed; inset: 0; display:none; place-items:center; background: rgba(0,0,0,0.35); z-index: 70; }
+.settings-modal[aria-hidden="false"] { display:grid; }
+.settings-card { background: var(--panel); padding:18px; border-radius:10px; width:320px; box-shadow: var(--shadow); }
+.settings-row { margin:8px 0; color:var(--muted); }
+.settings-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+
+/* Theme overrides - add classes onto the <body> element: e.g. <body class="theme-red"> */
+body.theme-red {
+  --bg: #3b0b0b; /* deep red background */
+  --panel: #fff6f6;
+  --panel-2: #fff0f0;
+  --text: #2b0b0b;
+  --muted: #6b2020;
+  --primary: #ff6b6b;
+  --primary-strong: #ff4b4b;
+  --accent: #b02a2a;
+}
+
+body.theme-green {
+  --bg: #062b12; /* dark green */
+  --panel: #f6fff6;
+  --panel-2: #effaf0;
+  --text: #08320b;
+  --muted: #2f6b41;
+  --primary: #5eead4;
+  --primary-strong: #34d399;
+  --accent: #147b52;
+}
+
+body.theme-gold {
+  --bg: #3a2b00; /* warm dark gold */
+  --panel: #fffaf0;
+  --panel-2: #fff5e6;
+  --text: #3b2b00;
+  --muted: #7a5f2a;
+  --primary: #ffd166;
+  --primary-strong: #ffb703;
+  --accent: #b07a00;
+}
+
+/* Additional theme colors for achievements */
+body.theme-t10k { --bg: #102a3a; --panel: #f0fbff; --text:#042333; --primary: #34d1ff; --accent:#0284c7; }
+body.theme-t50k { --bg: #3b0b0b; --panel: #fff6f6; --text:#2b0b0b; --primary:#ff6b6b; --accent:#b02a2a; }
+body.theme-t100k { --bg:#0b3b12; --panel:#f6fff6; --text:#042b11; --primary:#34d399; --accent:#0b7b3a; }
+body.theme-t200k { --bg:#2b0b3b; --panel:#fbf0ff; --text:#2b0b3b; --primary:#d946ef; --accent:#7a2a7a; }
+body.theme-t500k { --bg:#3b3310; --panel:#fffaf0; --text:#2b2a10; --primary:#ffd166; --accent:#b07a00; }
+body.theme-t1m { --bg:#102233; --panel:#f7faff; --text:#021222; --primary:#7dd3fc; --accent:#0369a1; }
+body.theme-t2m { --bg:#1a0f2b; --panel:#fff6fb; --text:#220b24; --primary:#fb7185; --accent:#a21b4a; }
+body.theme-t5m { --bg:#001a2b; --panel:#f0f8ff; --text:#042033; --primary:#60a5fa; --accent:#0b67d1; }
+body.theme-t10m { --bg:#2b1a00; --panel:#fffaf0; --text:#2b2100; --primary:#f97316; --accent:#b45309; }
+
+
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 body {
@@ -39,6 +112,9 @@ body {
   border-bottom: 1px solid rgba(0,0,0,.12);
   box-shadow: 0 6px 20px rgba(0,0,0,.20);
 }
+.header { position: relative; }
+.settings-icon { position: absolute; right: 16px; top: 18px; background: transparent; border: none; font-size: 20px; cursor: pointer; padding: 6px; border-radius: 8px; }
+.settings-icon:hover { background: rgba(255,255,255,0.06); }
 .header h1 { margin: 0 0 8px; font-weight: 800; letter-spacing: .35px; font-size: 36px; text-shadow: 0 2px 0 rgba(0,0,0,.35), 0 12px 32px rgba(83,118,255,.35); }
 .stats { display: flex; gap: 16px; flex-wrap: wrap; }
 .stat { background: var(--panel); padding: 8px 12px; border-radius: 10px; color: var(--muted); box-shadow: var(--shadow); }
@@ -91,6 +167,37 @@ body {
 .shop-item .title { font-weight: 700; }
 .shop-item .desc { color: var(--muted); font-size: 13px; }
 .shop-item .price { color: var(--accent); font-weight: 700; }
+
+/* Panel tabs inside the shop area */
+.panel-tabs { display:flex; gap:8px; align-items:center; margin-bottom:12px; }
+.panel-tabs .tab-btn { padding:8px 12px; border-radius:8px; background: transparent; border:1px solid rgba(0,0,0,0.06); cursor:pointer; font-weight:700; color:var(--text); }
+.panel-tabs .tab-btn.active { background: var(--primary); color: #0b1029; border-color: transparent; box-shadow: 0 8px 20px rgba(0,0,0,.12); }
+.panel-content { min-height:60px; }
+.themes-list { display:flex; flex-direction:column; gap:8px; }
+.theme-row { display:flex; gap:8px; align-items:center; }
+.theme-row .theme-label { flex:1; }
+
+/* Achievements progress styles */
+.achievements-list { display:flex; flex-direction:column; gap:10px; }
+.achievement-row { display:flex; gap:12px; align-items:center; padding:8px; background: var(--panel-2); border-radius:10px; border:1px solid rgba(0,0,0,.04); }
+.achievement-meta { flex:1; display:flex; flex-direction:column; gap:4px; }
+.achievement-title { font-weight:700; }
+.achievement-desc { color:var(--muted); font-size:13px; }
+.achievement-progress { width:220px; display:flex; flex-direction:column; gap:6px; align-items:flex-end }
+.progress-track { width:100%; height:10px; background: rgba(0,0,0,0.06); border-radius:8px; overflow:hidden; }
+.progress-fill { height:100%; background: linear-gradient(90deg,var(--primary),var(--primary-strong)); border-radius:8px 0 0 8px; transition: width .3s ease; }
+.progress-text { font-size:12px; color:var(--muted); font-weight:700; }
+
+/* Left-side achievement notification */
+.left-notify-container { position: fixed; left: 20px; top: 80px; display:flex; flex-direction:column; gap:10px; z-index:120; }
+.left-notify { display:flex; gap:12px; align-items:center; padding:10px 12px; border-radius:10px; min-width:220px; max-width:320px; box-shadow: 0 8px 24px rgba(0,0,0,.18); background: var(--panel); border-left: 6px solid var(--primary); color: var(--text); }
+.left-notify .icon { font-size:20px; }
+.left-notify .body { display:flex; flex-direction:column; gap:4px; }
+.left-notify .title { font-weight:800; }
+.left-notify .sub { font-size:12px; color:var(--muted); }
+.left-notify.show { animation: slideInLeft .36s cubic-bezier(.22,.61,.36,1); }
+@keyframes slideInLeft { from { transform: translateX(-12px); opacity: 0 } to { transform: translateX(0); opacity: 1 } }
+
 
 button {
   background: var(--primary);
