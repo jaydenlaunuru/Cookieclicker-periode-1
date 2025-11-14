@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Clicker OOP</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+        <div class="app">
+        <!-- Start screen (overlay) -->
+        <div id="startScreen" class="start-screen" aria-hidden="false">
+            <div class="start-card">
+                <h1>Cookie Clicker</h1>
+                <p>Verzamel cookies, koop upgrades en ontgrendel thema's!</p>
+                <div class="start-actions">
+                    <button id="playBtn">Play</button>
+                    <button id="openSettingsBtn" class="secondary">Settings</button>
+                </div>
+            </div>
+        </div>
+
+            <!-- Settings modal -->
+            <div id="settingsModal" class="settings-modal" aria-hidden="true">
+                <div class="settings-card">
+                    <h2>Instellingen</h2>
+                            <div class="settings-row">
+                                <label><input type="checkbox" id="soundToggle" checked> Geluid inschakelen</label>
+                            </div>
+                    <div class="settings-actions">
+                        <button id="saveSettingsBtn" class="secondary">Opslaan</button>
+                        <button id="resetProgressBtn" class="danger">Reset voortgang</button>
+                        <button id="closeSettingsBtn">Sluiten</button>
+                    </div>
+                </div>
+            </div>
+    <header class="header">
+        <button id="settingsIcon" class="settings-icon" title="Instellingen">⚙️</button>
+        <h1>Cookie Clicker</h1>
+    </header>
+
+    <main class="main">
+        <section class="clicker">
+            <button id="cookieButton" class="cookie-button" aria-label="Klik voor cookies">
+                <img class="cookie-img" src="cookie4.png">
+            <div id="floatingContainer" class="floating-container"></div>
+            </button>
+            <div class="stats">
+            <div class="stat"><span id="cookieCount">0</span> cookies</div>
+            <div class="stat"><span id="cps">0</span> cookies per sec</div>
+            <div class="stat"><span id="cpc">1</span> per click</div>
+            </div>
+        </section>
+
+        <section class="shop">
+            <h2 class="panel-title"></h2>
+            <div id="shopList" class="shop-list"></div>
+        </section>
+    </main>
+
+    <div class="footer">
+        <p>Gemaakt door Jayden & Aayan - Cookie Clicker OOP Project</p>
+    </div>
+
+    <script src="app.js"></script>
+    <noscript>Schakel JavaScript in om het spel te spelen.</noscript>
+</body>
+</html>
+
+
